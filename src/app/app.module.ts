@@ -4,6 +4,9 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SingleFile } from './single-file/single-file.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+import {MatProgressBarModule} from '@angular/material/progress-bar';
 
 @NgModule({
     declarations: [
@@ -12,7 +15,9 @@ import { SingleFile } from './single-file/single-file.component';
     ],
     imports: [
         BrowserModule,
-        AppRoutingModule
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MatProgressBarModule
     ],
     providers: [],
     bootstrap: [AppComponent]

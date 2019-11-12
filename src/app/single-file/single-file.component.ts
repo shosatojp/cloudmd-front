@@ -7,10 +7,9 @@ import { Component, Input } from '@angular/core';
 })
 export class SingleFile {
     @Input() file: File;
-    constructor() {
-    }
-    setFile(file: File) {
+    constructor() { }
 
+    setFile(file: File) {
         this.file = file;
     }
 }
