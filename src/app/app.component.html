@@ -1,10 +1,10 @@
-<div (dragover)="onDragover($event)" (dragleave)="onDragleave($event)" (drop)="onDrop($event)" [classList]="classlist">
-    <h1>HOGEHOGeehogedhoge</h1>
-</div>
+<div class="content">
+    <h1>Cloud Markdown</h1>
 
-<!-- <single-file id="files-list" *ngFor="let file of files"></single-file> -->
-<div id="files-list" *ngFor="let file of files">
-    <single-file [file]="file"></single-file>
+    <div id="droparea" (dragover)="onDragover($event)" (dragleave)="onDragleave($event)" (drop)="onDrop($event)"
+        [classList]="classlist">
+        <single-file [passwd]="passwd" [file]="file" *ngFor="let file of files"></single-file>
+    </div>
 </div>
 
 

@@ -9,9 +9,37 @@ import { SingleFile } from './single-file/single-file.component';
 export class AppComponent {
     title = 'cloudmd-front';
     files: File[] = [];
-    constructor() {
-    }
+    dragging: boolean = false;
+    constructor() { }
     classlist = [];
+
+    ngOnInit() {
+        this.startAuth().then(value => {
+            console.log('auth end', this.passwd);
+        }).catch((err) => {
+            console.log(err);
+        });
+    }
+
+    passwd: string;
+    socket: WebSocket;
+    startAuth() {
+        const self = this;
+        return new Promise(async (resolve, reject) => {
+            const res: Response = await fetch('http://localhost:8082/api/v1/ws/start');
+            if (res.status == 200) {
+                self.passwd = (await res.json())['passwd'];
+                self.socket = new WebSocket('ws://localhost:8082');
+                self.socket.addEventListener('open', function (event) {
+                    self.socket.send(JSON.stringify({ passwd: self.passwd }));
+                    resolve();
+                });
+            } else {
+                reject();
+            }
+        });
+    }
+
     onDragover(e) {
         if (!~this.classlist.indexOf('ondrag')) {
             this.classlist = this.classlist.concat('ondrag');

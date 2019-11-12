@@ -1,3 +1,22 @@
-h1{
-    color: aqua;
+.filename{
+    color: black;
+    margin: 10px;
+    font-size: large;
+}
+
+:host{
+    display:block;
+    overflow: hidden;
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    border: 1px solid skyblue;
+}
+.single-file-header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.message{
+    color: #444;
+    margin: 10px;
 }
