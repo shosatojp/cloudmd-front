@@ -12,17 +12,15 @@
         </mat-step>
         <mat-step>
             <ng-template matStepLabel>ログ</ng-template>
-            <div #logselement id="logs" [scrollTop]="logselement.scrollHeight">
-                <mat-card class="log-message-body" *ngFor="let log of logs">
-                    <!-- <mat-card-subtitle>{{log.type}}</mat-card-subtitle>
-                    <mat-card-content>{{log.body}}</mat-card-content> -->
+            <div #logselement id="logs">
+                <mat-card class="log-message-body" [ngClass]="{'log-message-stderr':log.type === 'stderr'}"
+                    *ngFor="let log of logs">
                     {{log.body}}
                 </mat-card>
             </div>
         </mat-step>
         <mat-step>
             <ng-template matStepLabel>完了</ng-template>
-
             <div>
                 <button mat-button (click)="downloadPDF()">PDFをダウンロード</button>
             </div>

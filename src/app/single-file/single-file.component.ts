@@ -35,7 +35,6 @@ export class SingleFile {
     async upload() {
         this.toggle_progress_bar(true);
         this.message = 'アップロードしています...';
-        console.log(this.passwd, this.file.name);
         fetch('http://localhost:8082/api/v1/upload/file', {
             method: 'post',
             body: JSON.stringify({

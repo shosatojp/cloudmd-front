@@ -1,5 +1,15 @@
 @import '~@angular/material/theming';
+
 @include mat-core();
+
+$primary: mat-palette($mat-indigo);
+$accent:  mat-palette($mat-yellow);
+$warn:    mat-palette($mat-red);
+
+$theme: mat-light-theme($primary, $accent, $warn);
+
+@include angular-material-theme($theme);
+
 .content{
     margin: 0 auto;
     width: 70%;
@@ -12,7 +22,7 @@
     overflow: auto;
     position: relative;
     height: 50vh;
-    background: rgb(217, 245, 255);
+    background: #b3e5fc;
     border-radius: 10px;
 
     $file-margin:10px;
@@ -52,4 +62,8 @@
 .log-message-body{
     word-wrap: break-word;
     font-family: 'Courier New', Courier, monospace;
+}
+
+.log-message-stderr{
+    background-color: #fce4ec;
 }
