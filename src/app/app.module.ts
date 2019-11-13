@@ -6,7 +6,11 @@ import { AppComponent } from './app.component';
 import { SingleFile } from './single-file/single-file.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatButtonModule } from '@angular/material/button';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatCardModule } from '@angular/material/card';
+
 
 @NgModule({
     declarations: [
@@ -17,7 +21,10 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
         BrowserModule,
         AppRoutingModule,
         BrowserAnimationsModule,
-        MatProgressBarModule
+        MatProgressBarModule,
+        MatButtonModule,
+        MatStepperModule,
+        MatCardModule,
     ],
     providers: [],
     bootstrap: [AppComponent]

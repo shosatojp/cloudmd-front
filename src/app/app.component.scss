@@ -1,3 +1,5 @@
+@import '~@angular/material/theming';
+@include mat-core();
 .content{
     margin: 0 auto;
     width: 70%;
@@ -24,9 +26,30 @@
         margin: $file-margin;
     }
 }
-.droparea-cover{
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    background-color: #87f878;
+
+#logs{
+    overflow: auto;
+    position: relative;
+    height: 50vh;
+    border-radius: 10px;
+
+    $file-margin:10px;
+    >*:first-child{
+        margin: $file-margin;
+    }
+    >*{
+        margin: $file-margin;
+    }
+    >*:last-child{
+        margin: $file-margin;
+    }
+}
+
+.log-message{
+    background: lightgreen;
+}
+
+.log-message-body{
+    word-wrap: break-word;
+    font-family: 'Courier New', Courier, monospace;
 }
