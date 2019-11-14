@@ -41,7 +41,7 @@ export class AppComponent {
             if (res.status == 200) {
                 const logs_element = document.querySelector('#logs');
                 self.passwd = (await res.json())['passwd'];
-                self.socket = new WebSocket(`ws://${location.host}`);
+                self.socket = new WebSocket(`wss://${location.host}`);
                 self.socket.addEventListener('open', function (event) {
                     self.socket.send(JSON.stringify({ passwd: self.passwd }));
                     resolve();
