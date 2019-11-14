@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { SingleFile } from './single-file/single-file.component';
 import { MatStepper } from '@angular/material/stepper';
+import { MatRadioGroup } from '@angular/material/radio';
 
 @Component({
     selector: 'app-root',
@@ -9,6 +10,7 @@ import { MatStepper } from '@angular/material/stepper';
 })
 export class AppComponent {
     @ViewChild('stepper', { static: false }) private stepper: MatStepper;
+    compile_type: string = 'markdown';
     title = 'cloudmd-front';
     files: File[] = [];
     dragging: boolean = false;
@@ -19,6 +21,7 @@ export class AppComponent {
         type: string,
         body: string
     }[] = [];
+    compiled: boolean = false;
 
     ngOnInit() {
         this.startAuth().then(value => {
@@ -49,6 +52,7 @@ export class AppComponent {
                         if (buffer) this.logs.push({ type: data.type, body: buffer });
                         if (data.body === 0) {
                             this.stepper.steps.last.select();
+                            this.compiled = true;
                         }
                     } else {
                         for (const c of data.body) {
@@ -72,11 +76,14 @@ export class AppComponent {
     }
 
     async compile() {
+        console.log(this.compile_type);
+        this.compiled = false;
         this.logs = [];
         const res = await fetch('/api/v1/exec/compile', {
             method: 'post',
             body: JSON.stringify({
                 passwd: this.passwd,
+                type: this.compile_type
             }),
             headers: {
                 'content-type': 'application/json',
@@ -87,10 +94,10 @@ export class AppComponent {
         }
     }
 
-    downloadPDF() {
+    download(ext) {
         const link = document.createElement('a');
-        link.href = `/data/${this.passwd}/main.pdf`;
-        link.download = 'main.pdf';
+        link.href = `/data/${this.passwd}/main${ext}`;
+        link.download = `main${ext}`;
         link.click();
     }
 

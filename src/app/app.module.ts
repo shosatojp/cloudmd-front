@@ -10,7 +10,11 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatCardModule } from '@angular/material/card';
-
+import { MatRadioModule } from '@angular/material/radio';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatBadgeModule } from '@angular/material/badge';
+import { FormsModule }   from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
     declarations: [
@@ -25,6 +29,11 @@ import { MatCardModule } from '@angular/material/card';
         MatButtonModule,
         MatStepperModule,
         MatCardModule,
+        MatRadioModule,
+        MatTooltipModule,
+        MatBadgeModule,
+        FormsModule,
+        MatIconModule,
     ],
     providers: [],
     bootstrap: [AppComponent]

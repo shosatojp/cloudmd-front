@@ -13,6 +13,7 @@ $theme: mat-light-theme($primary, $accent, $warn);
 .content{
     margin: 0 auto;
     width: 70%;
+    max-width: 700px;
 }
 
 .ondrag{
@@ -22,8 +23,10 @@ $theme: mat-light-theme($primary, $accent, $warn);
     overflow: auto;
     position: relative;
     height: 50vh;
-    background: #b3e5fc;
     border-radius: 10px;
+    background: #b3e5fc;
+    // z-index: 1;
+
 
     $file-margin:10px;
     >*:first-child{
@@ -36,6 +39,23 @@ $theme: mat-light-theme($primary, $accent, $warn);
         margin: $file-margin;
     }
 }
+
+// #droparea *{
+//     z-index: 2;
+// }
+
+// #droparea-cover{
+//     margin: 0;
+//     position: absolute;
+//     top: 0;
+//     bottom: 0;
+//     left: 0;
+//     right: 0;
+//     font-size: large;
+//     color: darkgray;
+//     z-index: 0;
+//     text-align: center;
+// }
 
 #logs{
     overflow: auto;
@@ -66,4 +86,15 @@ $theme: mat-light-theme($primary, $accent, $warn);
 
 .log-message-stderr{
     background-color: #fce4ec;
+}
+.form-content{
+    margin: 16px;
+}
+
+.mat-radio-button ~ .mat-radio-button {
+    margin-left: 16px;
+}
+
+button~button{
+    margin-left: 16px;
 }

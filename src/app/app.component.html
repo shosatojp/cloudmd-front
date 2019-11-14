@@ -6,9 +6,23 @@
             <ng-template matStepLabel>ファイルをアップロード</ng-template>
             <div id="droparea" (dragover)="onDragover($event)" (dragleave)="onDragleave($event)" (drop)="onDrop($event)"
                 [classList]="classlist">
+                <!-- <div id="droparea-cover">ファイルをドラッグアンドドロップ</div> -->
                 <single-file [passwd]="passwd" [file]="file" *ngFor="let file of files"></single-file>
             </div>
-            <button mat-raised-button color="primary" (click)="compile()" matStepperNext>コンパイル</button>
+            <div class="form-content">
+                <mat-radio-group aria-label="" [(ngModel)]="compile_type">
+                    <div>
+                        <label>コンパイル方式</label>
+                    </div>
+                    <mat-radio-button matTooltipPosition="above" value="markdown"
+                        matTooltip="MarkdownをTexに変換してからPDFにコンパイルします。`.md`ファイルが使用されます。">Markdown</mat-radio-button>
+                    <mat-radio-button matTooltipPosition="above" value="tex" matTooltip="TexをそのままPDFにコンパイルします。`.tex`ファイルが使用されます。">Tex
+                    </mat-radio-button>
+                </mat-radio-group>
+            </div>
+            <div style="margin: 10px 0;">
+                <button mat-raised-button color="primary" (click)="compile()" matStepperNext>コンパイル</button>
+            </div>
         </mat-step>
         <mat-step>
             <ng-template matStepLabel>ログ</ng-template>
@@ -22,7 +36,10 @@
         <mat-step>
             <ng-template matStepLabel>完了</ng-template>
             <div>
-                <button mat-button (click)="downloadPDF()">PDFをダウンロード</button>
+                <button mat-raised-button color="primary" mat-button (click)="download('.pdf')"
+                    [disabled]="!compiled"><mat-icon>get_app</mat-icon>PDFをダウンロード</button>
+                <button mat-raised-button color="secondary" mat-button (click)="download('.tex')"
+                    [disabled]="!compiled"><mat-icon>get_app</mat-icon>Texをダウンロード</button>
             </div>
         </mat-step>
     </mat-vertical-stepper>
