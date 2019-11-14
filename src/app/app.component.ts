@@ -37,11 +37,11 @@ export class AppComponent {
         const self = this;
         let buffer: string = '';
         return new Promise(async (resolve, reject) => {
-            const res: Response = await fetch('http://localhost:8082/api/v1/ws/start');
+            const res: Response = await fetch('/api/v1/ws/start');
             if (res.status == 200) {
                 const logs_element = document.querySelector('#logs');
                 self.passwd = (await res.json())['passwd'];
-                self.socket = new WebSocket('ws://localhost:8082');
+                self.socket = new WebSocket(`ws://${location.host}`);
                 self.socket.addEventListener('open', function (event) {
                     self.socket.send(JSON.stringify({ passwd: self.passwd }));
                     resolve();
