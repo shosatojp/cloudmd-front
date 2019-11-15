@@ -1,10 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatStepper } from '@angular/material/stepper';
+import { MatDialog, MatSnackBar } from '@angular/material';
+import { DialogComponent } from '../dialog/dialog.component';
 
 @Component({
-  selector: 'app-top',
-  templateUrl: './top.component.html',
-  styleUrls: ['./top.component.scss']
+    selector: 'app-top',
+    templateUrl: './top.component.html',
+    styleUrls: ['./top.component.scss']
 })
 export class TopComponent implements OnInit {
     @ViewChild('stepper', { static: false }) private stepper: MatStepper;
@@ -12,7 +14,7 @@ export class TopComponent implements OnInit {
     title = 'cloudmd-front';
     files: File[] = [];
     dragging: boolean = false;
-    constructor() { }
+    constructor(public matDialog: MatDialog, public snackbar: MatSnackBar) { }
     classlist = [];
 
     logs: {
@@ -22,8 +24,10 @@ export class TopComponent implements OnInit {
     compiled: boolean = false;
 
     ngOnInit() {
+        const self = this;
         this.startAuth().then(value => {
-            console.log('auth end', this.passwd);
+            console.log('Authorized: ', this.passwd);
+            self.snackbar.open('サーバーと接続しました！', 'OK', { duration: 2000 });
         }).catch((err) => {
             console.log(err);
         });
@@ -44,19 +48,40 @@ export class TopComponent implements OnInit {
                     self.socket.send(JSON.stringify({ passwd: self.passwd }));
                     resolve();
                 });
+                self.socket.onclose = (e: CloseEvent) => {
+                    self.matDialog.open(DialogComponent, {
+                        data: {
+                            message: `サーバーとの接続が切断されました(${e.code})`,
+                            content: 'このページをリロードしてください',
+                            actions: [{ label: 'リロード', fn: () => { location.reload() } }]
+                        }
+                    });
+                };
+                self.socket.onerror = (e: Event) => {
+                    self.matDialog.open(DialogComponent, {
+                        data: {
+                            message: 'サーバーとの接続に失敗しました',
+                            content: 'このページをリロードするか、時間が立ってからもう一度お試しください',
+                            actions: [{ label: 'リロード', fn: () => { location.reload() } }]
+                        }
+                    });
+                };
                 self.socket.onmessage = (e: MessageEvent) => {
                     const data = JSON.parse(e.data);
                     if (data.type == 'logend') {
-                        if (buffer) this.logs.push({ type: data.type, body: buffer });
+                        if (buffer) self.logs.push({ type: data.type, body: buffer });
                         if (data.body === 0) {
-                            this.stepper.steps.last.select();
-                            this.compiled = true;
+                            self.stepper.steps.last.select();
+                            self.compiled = true;
+                            self.snackbar.open('コンパイルに成功しました！PDFをダウンロードしてください', 'OK', { duration: 2000 });
+                        } else {
+                            self.snackbar.open('コンパイルに失敗しました。ログを確認してください', 'OK', { duration: 2000 });
                         }
                     } else {
                         for (const c of data.body) {
                             switch (c) {
                                 case '\n':
-                                    this.logs.push({ type: data.type, body: buffer });
+                                    self.logs.push({ type: data.type, body: buffer });
                                     logs_element.scrollTop = logs_element.scrollHeight;
                                     buffer = '';
                                     break;

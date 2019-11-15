@@ -22,7 +22,7 @@
                 </mat-radio-group>
             </div>
             <div style="margin: 10px 0;">
-                <button mat-raised-button color="primary" (click)="compile()" matStepperNext>コンパイル</button>
+                <button [disabled]="!files.length" mat-raised-button color="primary" (click)="compile()" matStepperNext>コンパイル</button>
             </div>
         </mat-step>
         <mat-step>

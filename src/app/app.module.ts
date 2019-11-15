@@ -17,6 +17,8 @@ import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { HelpComponent } from './help/help.component';
 import { TopComponent } from './top/top.component';
+import { DialogComponent } from './dialog/dialog.component';
+import { MatDialogModule, MatSnackBarModule } from '@angular/material';
 
 @NgModule({
     declarations: [
@@ -24,6 +26,7 @@ import { TopComponent } from './top/top.component';
         SingleFile,
         HelpComponent,
         TopComponent,
+        DialogComponent,
     ],
     imports: [
         BrowserModule,
@@ -38,8 +41,11 @@ import { TopComponent } from './top/top.component';
         MatBadgeModule,
         FormsModule,
         MatIconModule,
+        MatDialogModule,
+        MatSnackBarModule,
     ],
     providers: [],
-    bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
+    entryComponents: [DialogComponent]
 })
 export class AppModule { }
