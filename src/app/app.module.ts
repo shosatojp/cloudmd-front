@@ -13,13 +13,17 @@ import { MatCardModule } from '@angular/material/card';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatBadgeModule } from '@angular/material/badge';
-import { FormsModule }   from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { HelpComponent } from './help/help.component';
+import { TopComponent } from './top/top.component';
 
 @NgModule({
     declarations: [
         AppComponent,
-        SingleFile
+        SingleFile,
+        HelpComponent,
+        TopComponent,
     ],
     imports: [
         BrowserModule,
