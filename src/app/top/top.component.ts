@@ -15,7 +15,9 @@ export class TopComponent implements OnInit {
     title = 'cloudmd-front';
     files: File[] = [];
     dragging: boolean = false;
-    constructor(public matDialog: MatDialog, public snackbar: MatSnackBar) { }
+    constructor(
+        public matDialog: MatDialog,
+        public snackbar: MatSnackBar) { }
     classlist = [];
 
     logs: {
@@ -26,6 +28,7 @@ export class TopComponent implements OnInit {
 
     ngOnInit() {
         const self = this;
+        this.consent = JSON.parse(localStorage.getItem('consent'));
         this.startAuth().then(value => {
             console.log('Authorized: ', this.passwd);
             self.snackbar.open('サーバーと接続しました！', 'OK', { duration: 2000 });
@@ -99,8 +102,7 @@ export class TopComponent implements OnInit {
         });
     }
 
-    async compile() {
-        console.log(this.compile_type);
+    async  compile() {
         this.compiled = false;
         this.logs = [];
         const res = await fetch('/api/v1/exec/compile', {
@@ -153,5 +155,15 @@ export class TopComponent implements OnInit {
                 this.files = this.files.concat(files[key]);
             }
         }
+    }
+
+    consent: boolean = false;
+
+    onConsent() {
+        localStorage.setItem('consent', JSON.stringify(this.consent));
+    }
+
+    onDragComes(){
+        this.stepper.steps.first.select();
     }
 }

@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
     selector: 'single-file',
@@ -9,8 +10,9 @@ export class SingleFile {
     @Input() file: File;
     message: string = '';
     progress_mode: string = '';
+    completed: boolean = false;
     @Input() passwd: string;
-    constructor() {
+    constructor(private snackbar: MatSnackBar) {
     }
 
     // progress bar
@@ -46,8 +48,15 @@ export class SingleFile {
                 'content-type': 'application/json'
             }
         }).then(res => {
-            this.message = 'アップロードしました';
-            this.toggle_progress_bar(false);
+            this.completed = true;
+            if (res.status === 200) {
+                this.message = 'アップロードしました';
+                this.toggle_progress_bar(false);
+            } else {
+                this.message = 'アップロードに失敗しました';
+                this.toggle_progress_bar(false);
+                this.snackbar.open('アップロードに失敗しました', 'OK', { duration: 2000 });
+            }
         });
     }
 }

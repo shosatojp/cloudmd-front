@@ -1,62 +1,87 @@
-<div class="content">
-    <h1>Cloud Markdown</h1>
-    <a href="https://github.com/shosatojp/cloudmd/blob/master/HOWTOWRITE.md" target="_blank">ヘルプ</a>
-    <mat-vertical-stepper #stepper>
-        <mat-step>
-            <ng-template matStepLabel>ファイルをアップロード</ng-template>
-            <div id="droparea" (dragover)="onDragover($event)" (dragleave)="onDragleave($event)" (drop)="onDrop($event)"
-                [classList]="classlist">
-                <!-- <div id="droparea-cover">ファイルをドラッグアンドドロップ</div> -->
-                <single-file [passwd]="passwd" [file]="file" *ngFor="let file of files"></single-file>
-            </div>
-            <div class="form-content">
-                <mat-radio-group aria-label="" [(ngModel)]="compile_type">
-                    <div>
-                        <label>コンパイル方式</label>
+<div (dragenter)="onDragComes()" style="height: 100%; width: 100%;">
+    <div class="content">
+        <h1><img src="assets/cloud.png" style="height: 2rem;margin-right: 10px;vertical-align: middle;">Cloud Markdown
+        </h1>
+        <mat-vertical-stepper #stepper>
+            <mat-step>
+                <ng-template matStepLabel>ファイルをアップロード</ng-template>
+                <div id="droparea-cover">
+                    <div id="dragmessage" [ngStyle]="{'opacity':+!files.length}"><div>ファイルをドラッグアンドドロップ</div></div>
+                    <div id="droparea" (dragover)="onDragover($event)" (dragleave)="onDragleave($event)"
+                        (drop)="onDrop($event)" [classList]="classlist">
+                        <single-file [passwd]="passwd" [file]="file" *ngFor="let file of files"></single-file>
                     </div>
-                    <mat-radio-button matTooltipPosition="above" value="markdown"
-                        matTooltip="MarkdownをTexに変換してからPDFにコンパイルします。`.md`ファイルが使用されます。">Markdown</mat-radio-button>
-                    <mat-radio-button matTooltipPosition="above" value="tex"
-                        matTooltip="TexをそのままPDFにコンパイルします。`.tex`ファイルが使用されます。">Tex
-                    </mat-radio-button>
-                </mat-radio-group>
-                <mat-radio-group [disabled]="compile_type !== 'markdown'" [(ngModel)]="template_type">
-                    <div>
-                        <label>テンプレート</label>
-                    </div>
-                    <mat-radio-button matTooltipPosition="above" value="report" matTooltip="あらゆるレポートに対応するTex文書を作成できます">
-                        レポート</mat-radio-button>
-                    <mat-radio-button matTooltipPosition="above" value="english" matTooltip="英語のレポートに最適化したTex文書を作成できます">
-                        英語用</mat-radio-button>
-                </mat-radio-group>
-            </div>
-            <div style="margin: 10px 0;">
-                <button [disabled]="!files.length" mat-raised-button color="primary" (click)="compile()"
-                    matStepperNext>コンパイル</button>
-            </div>
-        </mat-step>
-        <mat-step>
-            <ng-template matStepLabel>ログ</ng-template>
-            <div #logselement id="logs">
-                <mat-card class="log-message-body" [ngClass]="{'log-message-stderr':log.type === 'stderr'}"
-                    *ngFor="let log of logs">
-                    {{log.body}}
-                </mat-card>
-            </div>
-            <div>
-                <button mat-raised-button color="secondary" mat-button (click)="download('.tex')">
-                    <mat-icon>get_app</mat-icon>Texをダウンロード
-                </button>
-            </div>
-        </mat-step>
-        <mat-step>
-            <ng-template matStepLabel>完了</ng-template>
-            <div>
-                <button mat-raised-button color="primary" mat-button (click)="download('.pdf')" [disabled]="!compiled">
-                    <mat-icon>get_app</mat-icon>PDFをダウンロード
-                </button>
-            </div>
-        </mat-step>
-    </mat-vertical-stepper>
+                </div>
+                <div class="form-content">
+                    <mat-radio-group aria-label="" [(ngModel)]="compile_type">
+                        <div>
+                            <label>コンパイル方式</label>
+                        </div>
+                        <mat-radio-button matTooltipPosition="above" value="markdown"
+                            matTooltip="MarkdownをTexに変換してからPDFにコンパイルします。`.md`ファイルが使用されます。">Markdown</mat-radio-button>
+                        <mat-radio-button matTooltipPosition="above" value="tex"
+                            matTooltip="TexをそのままPDFにコンパイルします。`.tex`ファイルが使用されます。">Tex
+                        </mat-radio-button>
+                    </mat-radio-group>
+                    <mat-radio-group [disabled]="compile_type !== 'markdown'" [(ngModel)]="template_type">
+                        <div>
+                            <label>テンプレート</label>
+                        </div>
+                        <mat-radio-button matTooltipPosition="above" value="report"
+                            matTooltip="あらゆるレポートに対応するTex文書を作成できます">
+                            レポート</mat-radio-button>
+                        <mat-radio-button matTooltipPosition="above" value="english"
+                            matTooltip="英語のレポートに最適化したTex文書を作成できます">
+                            英語用</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+                <div style="margin: 10px 0;">
+                    <button [disabled]="!(files.length && consent)" mat-raised-button color="primary"
+                        (click)="compile()" matStepperNext>コンパイル</button>
+                    <mat-checkbox style="margin-left: 20px;" (change)="onConsent()" [(ngModel)]="consent"><a
+                            href="https://github.com/shosatojp/cloudmd/blob/master/TOS.md"
+                            target="_blank">利用規約</a>に同意しました
+                    </mat-checkbox>
+                </div>
+            </mat-step>
+            <mat-step>
+                <ng-template matStepLabel>ログ</ng-template>
+                <div #logselement id="logs">
+                    <mat-card class="log-message-body" [ngClass]="{'log-message-stderr':log.type === 'stderr'}"
+                        *ngFor="let log of logs">
+                        {{log.body}}
+                    </mat-card>
+                </div>
+                <div>
+                    <button mat-raised-button color="secondary" mat-button (click)="download('.tex')">
+                        <mat-icon>get_app</mat-icon>Texをダウンロード
+                    </button>
+                </div>
+            </mat-step>
+            <mat-step>
+                <ng-template matStepLabel>完了</ng-template>
+                <div>
+                    <button mat-raised-button color="primary" mat-button (click)="download('.pdf')"
+                        [disabled]="!compiled">
+                        <mat-icon>get_app</mat-icon>PDFをダウンロード
+                    </button>
+                </div>
+            </mat-step>
+        </mat-vertical-stepper>
 
+        <footer>
+            <div>
+                <a href="https://github.com/shosatojp/cloudmd/blob/master/TOS.md" target="_blank">利用規約</a>
+                <a href="https://github.com/shosatojp/cloudmd/blob/master/PRIVACY_POLICY.md"
+                    target="_blank">プライバシーポリシー</a>
+            </div>
+            Copyright &copy; 2019 Sho Sato. All Rights Reserved.
+        </footer>
+
+        <div id="fixedbottomright">
+            <a mat-fab color="accent" href="https://github.com/shosatojp/cloudmd/blob/master/HOWTOWRITE.md"
+                target="_blank" style="font-size: xx-large;color: white;">?</a>
+        </div>
+
+    </div>
 </div>

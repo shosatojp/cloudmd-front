@@ -1,8 +1,10 @@
-
+h1{
+    text-align: center;
+}
 .content{
     margin: 0 auto;
-    width: 70%;
-    max-width: 700px;
+    width: 100%;
+    max-width: 800px;
 }
 
 .ondrag{
@@ -10,12 +12,12 @@
 }
 #droparea{
     overflow: auto;
-    position: relative;
-    height: 50vh;
-    border-radius: 10px;
-    background: #b3e5fc;
-    // z-index: 1;
-
+    position: absolute;
+    background: transparent;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
 
     $file-margin:10px;
     >*:first-child{
@@ -32,19 +34,24 @@
 // #droparea *{
 //     z-index: 2;
 // }
+#dragmessage{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
 
-// #droparea-cover{
-//     margin: 0;
-//     position: absolute;
-//     top: 0;
-//     bottom: 0;
-//     left: 0;
-//     right: 0;
-//     font-size: large;
-//     color: darkgray;
-//     z-index: 0;
-//     text-align: center;
-// }
+#droparea-cover{
+    border: 3px solid #3f51b5;
+    margin: 0;
+    height: 50vh;
+    position: relative;
+    font-size: large;
+    color: black;
+    text-align: center;
+    border-radius: 10px;
+}
 
 #logs{
     overflow: auto;
@@ -86,4 +93,39 @@
 
 button~button{
     margin-left: 16px;
+}
+
+footer{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 20px;
+
+    div{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+         
+        >a{
+            margin: 10px;
+        }
+    }
+}
+
+a:visited{
+    color: black;
+    text-decoration: none;
+}
+a:active{
+    color: black;
+}
+
+#fixedbottomright{
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    margin: 20px;
+
 }

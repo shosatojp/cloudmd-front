@@ -19,6 +19,7 @@ import { HelpComponent } from './help/help.component';
 import { TopComponent } from './top/top.component';
 import { DialogComponent } from './dialog/dialog.component';
 import { MatDialogModule, MatSnackBarModule } from '@angular/material';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @NgModule({
     declarations: [
@@ -43,6 +44,7 @@ import { MatDialogModule, MatSnackBarModule } from '@angular/material';
         MatIconModule,
         MatDialogModule,
         MatSnackBarModule,
+        MatCheckboxModule
     ],
     providers: [],
     bootstrap: [AppComponent],

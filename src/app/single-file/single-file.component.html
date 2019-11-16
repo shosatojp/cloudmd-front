@@ -1,6 +1,5 @@
-
 <div class="single-file-header">
     <div class="filename">{{file.name}}</div>
     <div class="message">{{message}}</div>
 </div>
-<mat-progress-bar [mode]="progress_mode"></mat-progress-bar>
+<mat-progress-bar [mode]="progress_mode" [ngStyle]="{'opacity':+!completed}"></mat-progress-bar>
