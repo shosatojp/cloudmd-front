@@ -2,4 +2,4 @@
     <div class="filename">{{file.name}}</div>
     <div class="message">{{message}}</div>
 </div>
-<mat-progress-bar [mode]="progress_mode" [ngStyle]="{'opacity':+!completed}"></mat-progress-bar>
+<mat-progress-bar [mode]="progress_mode" [ngStyle]="{'opacity':completed?0:1}"></mat-progress-bar>

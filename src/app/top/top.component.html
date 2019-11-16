@@ -6,7 +6,7 @@
             <mat-step>
                 <ng-template matStepLabel>ファイルをアップロード</ng-template>
                 <div id="droparea-cover">
-                    <div id="dragmessage" [ngStyle]="{'opacity':+!files.length}"><div>ファイルをドラッグアンドドロップ</div></div>
+                    <div id="dragmessage" [ngStyle]="{'opacity':files.length?0:1}"><div>ファイルをドラッグアンドドロップ</div></div>
                     <div id="droparea" (dragover)="onDragover($event)" (dragleave)="onDragleave($event)"
                         (drop)="onDrop($event)" [classList]="classlist">
                         <single-file [passwd]="passwd" [file]="file" *ngFor="let file of files"></single-file>
