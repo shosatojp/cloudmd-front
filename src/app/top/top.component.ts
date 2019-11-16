@@ -11,6 +11,7 @@ import { DialogComponent } from '../dialog/dialog.component';
 export class TopComponent implements OnInit {
     @ViewChild('stepper', { static: false }) private stepper: MatStepper;
     compile_type: string = 'markdown';
+    template_type: string = 'report';
     title = 'cloudmd-front';
     files: File[] = [];
     dragging: boolean = false;
@@ -106,7 +107,8 @@ export class TopComponent implements OnInit {
             method: 'post',
             body: JSON.stringify({
                 passwd: this.passwd,
-                type: this.compile_type
+                type: this.compile_type,
+                template: this.template_type
             }),
             headers: {
                 'content-type': 'application/json',
