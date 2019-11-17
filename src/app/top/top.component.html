@@ -33,6 +33,9 @@
                         <mat-radio-button matTooltipPosition="above" value="english"
                             matTooltip="英語のレポートに最適化したTex文書を作成できます">
                             英語用</mat-radio-button>
+                        <mat-radio-button matTooltipPosition="above" value="thesis"
+                            matTooltip="論文に最適化したTwoColumnsなTex文書を作成できます">
+                            論文</mat-radio-button>
                     </mat-radio-group>
                 </div>
                 <div style="margin: 10px 0;">
@@ -62,9 +65,10 @@
                 <ng-template matStepLabel>完了</ng-template>
                 <div>
                     <button mat-raised-button color="primary" mat-button (click)="download('.pdf')"
-                        [disabled]="!compiled">
+                        [disabled]="!compiled" style="margin-bottom: 16px;">
                         <mat-icon>get_app</mat-icon>PDFをダウンロード
                     </button>
+                    <embed [src]="safepdfurl" [ngStyle]="{'height':safepdfurl?'50vh':'0'}" type="application/pdf" style="width: 100%;">
                 </div>
             </mat-step>
         </mat-vertical-stepper>

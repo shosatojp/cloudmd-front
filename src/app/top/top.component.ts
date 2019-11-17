@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatStepper } from '@angular/material/stepper';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { DialogComponent } from '../dialog/dialog.component';
+import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-top',
@@ -17,7 +18,8 @@ export class TopComponent implements OnInit {
     dragging: boolean = false;
     constructor(
         public matDialog: MatDialog,
-        public snackbar: MatSnackBar) { }
+        public snackbar: MatSnackBar,
+        private sanitizer: DomSanitizer) { }
     classlist = [];
 
     logs: {
@@ -25,6 +27,7 @@ export class TopComponent implements OnInit {
         body: string
     }[] = [];
     compiled: boolean = false;
+    safepdfurl: SafeResourceUrl = null;
 
     ngOnInit() {
         const self = this;
@@ -78,6 +81,7 @@ export class TopComponent implements OnInit {
                             self.stepper.steps.last.select();
                             self.compiled = true;
                             self.snackbar.open('コンパイルに成功しました！PDFをダウンロードしてください', 'OK', { duration: 2000 });
+                            self.safepdfurl = self.sanitizer.bypassSecurityTrustResourceUrl(`data/${self.passwd}/main.pdf`);
                         } else {
                             self.snackbar.open('コンパイルに失敗しました。ログを確認してください', 'OK', { duration: 2000 });
                         }
@@ -163,7 +167,7 @@ export class TopComponent implements OnInit {
         localStorage.setItem('consent', JSON.stringify(this.consent));
     }
 
-    onDragComes(){
+    onDragComes() {
         this.stepper.steps.first.select();
     }
 }
