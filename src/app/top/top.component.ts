@@ -171,7 +171,7 @@ export class TopComponent implements OnInit {
         this.dragging = true;
         e.preventDefault();
     }
-    
+
     onDrop(e: DragEvent) {
         this.dragging = false;
         e.preventDefault();
@@ -184,7 +184,12 @@ export class TopComponent implements OnInit {
                 this.files = this.files.concat(files[key]);
             }
         }
+
+        // count md
+        this.compile_type = (this.files.filter(e => e.name.endsWith('.md')).length) ? 'markdown' : 'tex';
     }
+
+
 
     consent: boolean = false;
 
