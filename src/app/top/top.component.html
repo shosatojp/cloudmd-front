@@ -84,15 +84,18 @@
                     </mat-card>
                 </div>
                 <div>
-                    <button mat-raised-button color="secondary" mat-button (click)="download('.tex')">
+                    <button mat-raised-button color="secondary" mat-button (click)="download('main.tex')">
                         <mat-icon>get_app</mat-icon>Texをダウンロード
+                    </button>
+                    <button mat-raised-button color="secondary" mat-button (click)="download('template.tex')">
+                        <mat-icon>get_app</mat-icon>テンプレートをダウンロード
                     </button>
                 </div>
             </mat-step>
             <mat-step>
                 <ng-template matStepLabel>完了</ng-template>
                 <div>
-                    <button mat-raised-button color="primary" mat-button (click)="download('.pdf')"
+                    <button mat-raised-button color="primary" mat-button (click)="download('main.pdf')"
                         [disabled]="!compiled" style="margin-bottom: 16px;">
                         <mat-icon>get_app</mat-icon>PDFをダウンロード
                     </button>

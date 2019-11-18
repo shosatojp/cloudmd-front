@@ -143,12 +143,12 @@ export class TopComponent implements OnInit {
         }
     }
 
-    download(ext) {
-        const path = `/api/v1/download/file/${this.passwd}/main${ext}`;
+    download(filename: string) {
+        const path = `/api/v1/download/file/${this.passwd}/${filename}`;
         const link = document.createElement('a');
         if (link.download !== undefined) {
             link.href = path;
-            link.download = `main${ext}`;
+            link.download = filename;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
