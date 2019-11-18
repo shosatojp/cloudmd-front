@@ -17,12 +17,13 @@ export class TopComponent implements OnInit {
     title = 'cloudmd-front';
     files: File[] = [];
     dragging: boolean = false;
+    pdf_minorversion: string = localStorage.getItem('pdfminorversion') || '5';
     constructor(
         public matDialog: MatDialog,
         public snackbar: MatSnackBar,
         private sanitizer: DomSanitizer) {
         if (~navigator.appVersion.indexOf('Edge')) {
-            this.browser = 'edge';
+            // this.browser = 'edge';
         }
     }
 
@@ -130,7 +131,8 @@ export class TopComponent implements OnInit {
             body: JSON.stringify({
                 passwd: this.passwd,
                 type: this.compile_type,
-                template: this.template_type
+                template: this.template_type,
+                pdf_minorversion: this.pdf_minorversion,
             }),
             headers: {
                 'content-type': 'application/json',
@@ -199,5 +201,9 @@ export class TopComponent implements OnInit {
 
     onDragComes() {
         this.stepper.steps.first.select();
+    }
+
+    onPDFMinorVersionChanged() {
+        localStorage.setItem('pdfminorversion', this.pdf_minorversion);
     }
 }

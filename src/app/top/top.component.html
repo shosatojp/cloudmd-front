@@ -6,37 +6,65 @@
             <mat-step>
                 <ng-template matStepLabel>ファイルをアップロード</ng-template>
                 <div id="droparea-cover" [className]="dragging?'dragging':''">
-                    <div id="dragmessage" [ngStyle]="{'opacity':files.length?0:1}"><div>ファイルをドラッグアンドドロップ</div></div>
+                    <div id="dragmessage" [ngStyle]="{'opacity':files.length?0:1}">
+                        <div>ファイルをドラッグアンドドロップ</div>
+                    </div>
                     <div id="droparea" (dragover)="onDragover($event)" (dragleave)="onDragleave($event)"
                         (drop)="onDrop($event)" (dragend)="onDragEnd($event)">
                         <single-file [passwd]="passwd" [file]="file" *ngFor="let file of files"></single-file>
                     </div>
                 </div>
                 <div class="form-content">
-                    <mat-radio-group aria-label="" [(ngModel)]="compile_type">
-                        <div>
-                            <label>コンパイル方式</label>
-                        </div>
-                        <mat-radio-button matTooltipPosition="above" value="markdown"
-                            matTooltip="MarkdownをTexに変換してからPDFにコンパイルします。`.md`ファイルが使用されます。">Markdown</mat-radio-button>
-                        <mat-radio-button matTooltipPosition="above" value="tex"
-                            matTooltip="TexをそのままPDFにコンパイルします。`.tex`ファイルが使用されます。">Tex
-                        </mat-radio-button>
-                    </mat-radio-group>
-                    <mat-radio-group [disabled]="compile_type !== 'markdown'" [(ngModel)]="template_type">
-                        <div>
-                            <label>テンプレート</label>
-                        </div>
-                        <mat-radio-button matTooltipPosition="above" value="report"
-                            matTooltip="あらゆるレポートに対応するTex文書を作成できます">
-                            レポート</mat-radio-button>
-                        <mat-radio-button matTooltipPosition="above" value="english"
-                            matTooltip="英語のレポートに最適化したTex文書を作成できます">
-                            英語用</mat-radio-button>
-                        <mat-radio-button matTooltipPosition="above" value="thesis"
-                            matTooltip="論文に最適化したTwoColumnsなTex文書を作成できます">
-                            論文</mat-radio-button>
-                    </mat-radio-group>
+                    <mat-accordion [multi]="true">
+                        <mat-expansion-panel [expanded]="true">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title> 標準設定 </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <mat-radio-group aria-label="" [(ngModel)]="compile_type">
+                                <div>
+                                    <label>コンパイル方式</label>
+                                </div>
+                                <mat-radio-button matTooltipPosition="above" value="markdown"
+                                    matTooltip="MarkdownをTexに変換してからPDFにコンパイルします。`.md`ファイルが使用されます。">Markdown
+                                </mat-radio-button>
+                                <mat-radio-button matTooltipPosition="above" value="tex"
+                                    matTooltip="TexをそのままPDFにコンパイルします。`.tex`ファイルが使用されます。">Tex
+                                </mat-radio-button>
+                            </mat-radio-group>
+
+                            <mat-radio-group [disabled]="compile_type !== 'markdown'" [(ngModel)]="template_type">
+                                <div>
+                                    <label>テンプレート</label>
+                                </div>
+                                <mat-radio-button matTooltipPosition="above" value="report"
+                                    matTooltip="あらゆるレポートに対応するTex文書を作成できます">
+                                    レポート</mat-radio-button>
+                                <mat-radio-button matTooltipPosition="above" value="english"
+                                    matTooltip="英語のレポートに最適化したTex文書を作成できます">
+                                    英語用</mat-radio-button>
+                                <mat-radio-button matTooltipPosition="above" value="thesis"
+                                    matTooltip="論文に最適化したTwoColumnsなTex文書を作成できます">
+                                    論文</mat-radio-button>
+                            </mat-radio-group>
+                        </mat-expansion-panel>
+                        <mat-expansion-panel [expanded]="false">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title> 詳細設定 </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <div>
+                                <mat-radio-group [disabled]="compile_type !== 'markdown'"
+                                    [(ngModel)]="pdf_minorversion" (change)="onPDFMinorVersionChanged()">
+                                    <div>
+                                        <label>PDFバージョン</label>
+                                    </div>
+                                    <mat-radio-button value="4">1.4</mat-radio-button>
+                                    <mat-radio-button value="5">1.5</mat-radio-button>
+                                    <mat-radio-button value="6">1.6</mat-radio-button>
+                                    <mat-radio-button value="7">1.7</mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+                        </mat-expansion-panel>
+                    </mat-accordion>
                 </div>
                 <div style="margin: 10px 0;">
                     <button [disabled]="!(files.length && consent)" mat-raised-button color="primary"
@@ -68,7 +96,9 @@
                         [disabled]="!compiled" style="margin-bottom: 16px;">
                         <mat-icon>get_app</mat-icon>PDFをダウンロード
                     </button>
-                    <embed type="application/pdf" [src]="safepdfurl" [ngStyle]="{'height':(safepdfurl && browser!=='edge')?'50vh':'0'}" type="application/pdf" style="width: 100%;">
+                    <embed type="application/pdf" [src]="safepdfurl"
+                        [ngStyle]="{'height':(safepdfurl && browser!=='edge')?'50vh':'0'}" type="application/pdf"
+                        style="width: 100%;">
                 </div>
             </mat-step>
         </mat-vertical-stepper>

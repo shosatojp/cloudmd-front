@@ -20,6 +20,7 @@ import { TopComponent } from './top/top.component';
 import { DialogComponent } from './dialog/dialog.component';
 import { MatDialogModule, MatSnackBarModule } from '@angular/material';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 @NgModule({
     declarations: [
@@ -44,7 +45,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
         MatIconModule,
         MatDialogModule,
         MatSnackBarModule,
-        MatCheckboxModule
+        MatCheckboxModule,
+        MatExpansionModule,
     ],
     providers: [],
     bootstrap: [AppComponent],
