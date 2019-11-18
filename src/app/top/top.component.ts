@@ -143,17 +143,22 @@ export class TopComponent implements OnInit {
         }
     }
 
-    download(filename: string) {
+    async download(filename: string) {
         const path = `/api/v1/download/file/${this.passwd}/${filename}`;
-        const link = document.createElement('a');
-        if (link.download !== undefined) {
-            link.href = path;
-            link.download = filename;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+        const res = await fetch(path, { method: 'head' });
+        if (res.status === 200) {
+            const link = document.createElement('a');
+            if (link.download !== undefined) {
+                link.href = path;
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            } else {
+                window.open(location.origin + path, '_blank');
+            }
         } else {
-            window.open(location.origin + path, '_blank');
+            this.snackbar.open('ファイルは存在しません', 'OK', { duration: 2000 });
         }
     }
 
