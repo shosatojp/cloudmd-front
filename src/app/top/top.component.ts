@@ -27,7 +27,7 @@ export class TopComponent implements OnInit {
         body: string
     }[] = [];
     compiled: boolean = false;
-    safepdfurl: SafeResourceUrl = null;
+    safepdfurl: SafeResourceUrl = undefined;
 
     ngOnInit() {
         const self = this;
@@ -42,68 +42,80 @@ export class TopComponent implements OnInit {
 
     passwd: string;
     socket: WebSocket;
-    startAuth() {
-        const self = this;
-        let buffer: string = '';
-        return new Promise(async (resolve, reject) => {
-            const res: Response = await fetch('/api/v1/ws/start');
-            if (res.status == 200) {
-                const logs_element = document.querySelector('#logs');
-                self.passwd = (await res.json())['passwd'];
-                self.socket = new WebSocket(`wss://${location.host}`);
-                self.socket.addEventListener('open', function (event) {
-                    self.socket.send(JSON.stringify({ passwd: self.passwd }));
-                    resolve();
+
+    connectWebSocket(): Promise<WebSocket> {
+        return new Promise((res, rej) => {
+            const self = this;
+            let buffer: string = '';
+            const logs_element = document.querySelector('#logs');
+
+            const socket: WebSocket = new WebSocket(`wss://${location.host}`);
+            self.socket = socket;
+            socket.addEventListener('open', function (event) {
+                socket.send(JSON.stringify({ passwd: self.passwd }));
+                res(socket);
+            });
+            let haserror = false;
+            socket.onclose = async (e: CloseEvent) => {
+                if (!haserror) {
+                    console.log('trying reconnect to server.');
+                    self.socket = await this.connectWebSocket();
+                }
+                // self.matDialog.open(DialogComponent, {
+                //     data: {
+                //         message: `サーバーとの接続が切断されました(${e.code})`,
+                //         content: 'このページをリロードしてください',
+                //         actions: [{ label: 'リロード', fn: () => { location.reload() } }]
+                //     }
+                // });
+            };
+            socket.onerror = (e: Event) => {
+                haserror = true;
+                self.matDialog.open(DialogComponent, {
+                    data: {
+                        message: 'サーバーとの接続に失敗しました',
+                        content: 'このページをリロードするか、時間が立ってからもう一度お試しください',
+                        actions: [{ label: 'リロード', fn: () => { location.reload() } }]
+                    }
                 });
-                self.socket.onclose = (e: CloseEvent) => {
-                    self.matDialog.open(DialogComponent, {
-                        data: {
-                            message: `サーバーとの接続が切断されました(${e.code})`,
-                            content: 'このページをリロードしてください',
-                            actions: [{ label: 'リロード', fn: () => { location.reload() } }]
-                        }
-                    });
-                };
-                self.socket.onerror = (e: Event) => {
-                    self.matDialog.open(DialogComponent, {
-                        data: {
-                            message: 'サーバーとの接続に失敗しました',
-                            content: 'このページをリロードするか、時間が立ってからもう一度お試しください',
-                            actions: [{ label: 'リロード', fn: () => { location.reload() } }]
-                        }
-                    });
-                };
-                self.socket.onmessage = (e: MessageEvent) => {
-                    const data = JSON.parse(e.data);
-                    if (data.type == 'logend') {
-                        if (buffer) self.logs.push({ type: data.type, body: buffer });
-                        if (data.body === 0) {
-                            self.stepper.steps.last.select();
-                            self.compiled = true;
-                            self.snackbar.open('コンパイルに成功しました！PDFをダウンロードしてください', 'OK', { duration: 2000 });
-                            self.safepdfurl = self.sanitizer.bypassSecurityTrustResourceUrl(`data/${self.passwd}/main.pdf`);
-                        } else {
-                            self.snackbar.open('コンパイルに失敗しました。ログを確認してください', 'OK', { duration: 2000 });
-                        }
+            };
+            socket.onmessage = (e: MessageEvent) => {
+                const data = JSON.parse(e.data);
+                if (data.type == 'logend') {
+                    if (buffer) self.logs.push({ type: data.type, body: buffer });
+                    if (data.body === 0) {
+                        self.stepper.steps.last.select();
+                        self.compiled = true;
+                        self.snackbar.open('コンパイルに成功しました！PDFをダウンロードしてください', 'OK', { duration: 2000 });
+                        self.safepdfurl = self.sanitizer.bypassSecurityTrustResourceUrl(`data/${self.passwd}/main.pdf`);
                     } else {
-                        for (const c of data.body) {
-                            switch (c) {
-                                case '\n':
-                                    self.logs.push({ type: data.type, body: buffer });
-                                    logs_element.scrollTop = logs_element.scrollHeight;
-                                    buffer = '';
-                                    break;
-                                default:
-                                    buffer += c;
-                                    break;
-                            }
+                        self.snackbar.open('コンパイルに失敗しました。ログを確認してください', 'OK', { duration: 2000 });
+                    }
+                } else {
+                    for (const c of data.body) {
+                        switch (c) {
+                            case '\n':
+                                self.logs.push({ type: data.type, body: buffer });
+                                logs_element.scrollTop = logs_element.scrollHeight;
+                                buffer = '';
+                                break;
+                            default:
+                                buffer += c;
+                                break;
                         }
                     }
-                };
-            } else {
-                reject();
-            }
+                }
+            };
         });
+    }
+    async startAuth() {
+        const res: Response = await fetch('/api/v1/ws/start');
+        if (res.status == 200) {
+            this.passwd = (await res.json())['passwd'];
+            this.socket = await this.connectWebSocket();
+        } else {
+            throw new Error();
+        }
     }
 
     async  compile() {
@@ -126,10 +138,17 @@ export class TopComponent implements OnInit {
     }
 
     download(ext) {
+        const path = `/api/v1/download/file/${this.passwd}/main${ext}`;
         const link = document.createElement('a');
-        link.href = `/data/${this.passwd}/main${ext}`;
-        link.download = `main${ext}`;
-        link.click();
+        if(link.download!==undefined){
+            link.href = path;
+            link.download = `main${ext}`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }else{
+            window.open(location.origin + path, '_blank');
+        }
     }
 
 
