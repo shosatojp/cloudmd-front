@@ -31,15 +31,17 @@ h1{
     }
 }
 
-// #droparea *{
-//     z-index: 2;
-// }
 #dragmessage{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100%;
+}
+
+#dragmessage-text{
+    margin: 30px;
+    word-break: break-word;
 }
 
 #droparea-cover{
@@ -97,8 +99,8 @@ h1{
     margin-left: 16px;
 }
 
-button~button{
-    margin-left: 16px;
+button{
+    margin: 10px;
 }
 
 footer{

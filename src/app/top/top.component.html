@@ -7,7 +7,7 @@
                 <ng-template matStepLabel>ファイルをアップロード</ng-template>
                 <div id="droparea-cover" [className]="dragging?'dragging':''">
                     <div id="dragmessage" [ngStyle]="{'opacity':files.length?0:1}">
-                        <div>ファイルをドラッグアンドドロップ</div>
+                        <div id="dragmessage-text">ファイルをドラッグアンドドロップ</div>
                     </div>
                     <div id="droparea" (dragover)="onDragover($event)" (dragleave)="onDragleave($event)"
                         (drop)="onDrop($event)" (dragend)="onDragEnd($event)">
@@ -52,8 +52,7 @@
                                 <mat-panel-title> 詳細設定 </mat-panel-title>
                             </mat-expansion-panel-header>
                             <div>
-                                <mat-radio-group [disabled]="compile_type !== 'markdown'"
-                                    [(ngModel)]="pdf_minorversion" (change)="onPDFMinorVersionChanged()">
+                                <mat-radio-group [(ngModel)]="pdf_minorversion" (change)="onPDFMinorVersionChanged()">
                                     <div>
                                         <label>PDFバージョン</label>
                                     </div>
