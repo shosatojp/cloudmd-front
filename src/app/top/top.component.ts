@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { MatStepper } from '@angular/material/stepper';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { DialogComponent } from '../dialog/dialog.component';
@@ -11,6 +11,7 @@ import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 })
 export class TopComponent implements OnInit {
     @ViewChild('stepper', { static: false }) private stepper: MatStepper;
+    browser: string;
     compile_type: string = 'markdown';
     template_type: string = 'report';
     title = 'cloudmd-front';
@@ -19,8 +20,11 @@ export class TopComponent implements OnInit {
     constructor(
         public matDialog: MatDialog,
         public snackbar: MatSnackBar,
-        private sanitizer: DomSanitizer) { }
-    classlist = [];
+        private sanitizer: DomSanitizer) {
+        if (~navigator.appVersion.indexOf('Edge')) {
+            this.browser = 'edge';
+        }
+    }
 
     logs: {
         type: string,
@@ -140,34 +144,36 @@ export class TopComponent implements OnInit {
     download(ext) {
         const path = `/api/v1/download/file/${this.passwd}/main${ext}`;
         const link = document.createElement('a');
-        if(link.download!==undefined){
+        if (link.download !== undefined) {
             link.href = path;
             link.download = `main${ext}`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-        }else{
+        } else {
             window.open(location.origin + path, '_blank');
         }
     }
 
-
     onDragover(e) {
-        if (!~this.classlist.indexOf('ondrag')) {
-            this.classlist = this.classlist.concat('ondrag');
-        }
+        this.dragging = true;
         e.preventDefault();
     }
-
     onDragleave(e) {
-        this.classlist = this.classlist.filter(e => e != 'ondrag');
+        this.dragging = false;
+        e.preventDefault();
+    }
+    onDragEnd(e) {
+        this.dragging = false;
         e.preventDefault();
     }
     onDragEnter(e) {
+        this.dragging = true;
         e.preventDefault();
     }
-
+    
     onDrop(e: DragEvent) {
+        this.dragging = false;
         e.preventDefault();
         const files = e.dataTransfer.files;
         for (const key in files) {

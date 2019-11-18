@@ -5,10 +5,10 @@
         <mat-vertical-stepper #stepper>
             <mat-step>
                 <ng-template matStepLabel>ファイルをアップロード</ng-template>
-                <div id="droparea-cover">
+                <div id="droparea-cover" [className]="dragging?'dragging':''">
                     <div id="dragmessage" [ngStyle]="{'opacity':files.length?0:1}"><div>ファイルをドラッグアンドドロップ</div></div>
                     <div id="droparea" (dragover)="onDragover($event)" (dragleave)="onDragleave($event)"
-                        (drop)="onDrop($event)" [classList]="classlist">
+                        (drop)="onDrop($event)" (dragend)="onDragEnd($event)">
                         <single-file [passwd]="passwd" [file]="file" *ngFor="let file of files"></single-file>
                     </div>
                 </div>
@@ -68,7 +68,7 @@
                         [disabled]="!compiled" style="margin-bottom: 16px;">
                         <mat-icon>get_app</mat-icon>PDFをダウンロード
                     </button>
-                    <embed [src]="safepdfurl" [ngStyle]="{'height':safepdfurl?'50vh':'0'}" type="application/pdf" style="width: 100%;">
+                    <embed type="application/pdf" [src]="safepdfurl" [ngStyle]="{'height':(safepdfurl && browser!=='edge')?'50vh':'0'}" type="application/pdf" style="width: 100%;">
                 </div>
             </mat-step>
         </mat-vertical-stepper>
