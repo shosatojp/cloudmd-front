@@ -92,7 +92,8 @@ export class TopComponent implements OnInit {
                         self.stepper.steps.last.select();
                         self.compiled = true;
                         self.snackbar.open('コンパイルに成功しました！PDFをダウンロードしてください', 'OK', { duration: 2000 });
-                        self.safepdfurl = self.sanitizer.bypassSecurityTrustResourceUrl(`data/${self.passwd}/main.pdf`);
+                        // self.safepdfurl = self.sanitizer.bypassSecurityTrustResourceUrl(`data/${self.passwd}/main.pdf`);
+                        self.safepdfurl = self.sanitizer.bypassSecurityTrustResourceUrl(`/pdfjs/web/viewer.html?file=/data/${self.passwd}/main.pdf`);
                     } else {
                         self.snackbar.open('コンパイルに失敗しました。ログを確認してください', 'OK', { duration: 2000 });
                     }

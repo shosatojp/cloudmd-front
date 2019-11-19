@@ -98,9 +98,10 @@
                         [disabled]="!compiled" style="margin-bottom: 16px;">
                         <mat-icon>get_app</mat-icon>PDFをダウンロード
                     </button>
-                    <embed type="application/pdf" [src]="safepdfurl"
+                    <!-- <embed type="application/pdf" [src]="safepdfurl"
                         [ngStyle]="{'height':(safepdfurl && browser!=='edge')?'50vh':'0'}" type="application/pdf"
-                        style="width: 100%;">
+                        style="width: 100%;"> -->
+                    <iframe id="pdfviewer" [src]="safepdfurl"></iframe>
                 </div>
             </mat-step>
         </mat-vertical-stepper>
