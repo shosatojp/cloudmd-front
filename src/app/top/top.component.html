@@ -101,7 +101,7 @@
                     <!-- <embed type="application/pdf" [src]="safepdfurl"
                         [ngStyle]="{'height':(safepdfurl && browser!=='edge')?'50vh':'0'}" type="application/pdf"
                         style="width: 100%;"> -->
-                    <iframe id="pdfviewer" [src]="safepdfurl"></iframe>
+                    <iframe id="pdfviewer" [src]="safepdfurl" [ngStyle]="{'height':safepdfurl?'50vh':'0',opacity:safepdfurl?'1':'0'}"></iframe>
                 </div>
             </mat-step>
         </mat-vertical-stepper>
