@@ -54,7 +54,7 @@ export class TopComponent implements OnInit {
             let buffer: string = '';
             const logs_element = document.querySelector('#logs');
 
-            const socket: WebSocket = new WebSocket(`wss://${location.host}`);
+            const socket: WebSocket = new WebSocket(`${location.protocol.replace('http', 'ws')}//${location.host}`);
             self.socket = socket;
             socket.addEventListener('open', function (event) {
                 socket.send(JSON.stringify({ passwd: self.passwd }));
